@@ -1,0 +1,15 @@
+/out
+/.idea
+.DS_Store
+/build/
+/dist
+/web/
+/src/main/webapp/test
+/src/main/webapp/static
+/src/main/webapp/map
+/src/main/webapp/WEB-INF/views/*/**
+/src/main/webapp/WEB-INF/server.conf
+/src/main/webapp/WEB-INF/jfk.properties
+/src/main/webapp/WEB-INF/config
+/target/
+jfk-velocity-tools.iml
