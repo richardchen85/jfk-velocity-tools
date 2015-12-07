@@ -257,10 +257,6 @@ public class Resource {
 
         JSONObject node = map.getNode(id);
 
-//        if (node.containsKey("type") && "css".equals(node.getString("type"))) {
-//            deffer = false;
-//        }
-
         // 如果添加过了而且添加的方式也相同则不重复添加。（这里说的方式是指，同步 or 异步）
         // 如果之前是同步的这次异步添加则忽略掉。都同步添加过了，不需要异步再添加一次。
         // 注意：null 不能直接用来和 false\true 比较，否则报错。
@@ -637,45 +633,27 @@ public class Resource {
     }
 
     public String buildAMDPath() {
-        JSONObject paths = new JSONObject();
-
-        calculate();
-
-        for (String id: this.loaded.keySet()) {
-            Boolean async = loaded.get(id);
-
-            if (!async) {
-                continue;
-            }
-
-            JSONObject node = map.getNode(id);
-
-            if (!node.getString("type").equals("js")) {
-                continue;
-            }
-
-            String moduleId = node.containsKey("extra") && node.getJSONObject("extra").containsKey("moduleId") ?
-                    node.getJSONObject("extra").getString("moduleId") :
-                    id.replaceAll("\\.js$", "");
-            String uri = node.getString("uri");
-
-            if (node.containsKey("pkg")) {
-                JSONObject pkgNode = map.getNode(node.getString("pkg"), "pkg");
-                uri = pkgNode.getString("uri");
-            }
-
-            paths.put(moduleId, uri.replaceAll("\\.js$", ""));
-        }
-
-        if (paths.isEmpty()) {
-            return "";
-        } else {
-            return "require.config({paths: " + JSONObject.toJSON(paths) + "})";
-        }
+        return buildModuleMap("amd");
     }
 
     public String buildCMDMap() {
+        return buildModuleMap("cmd");
+    }
+
+    /**
+     * 生成模块化map
+     * @param module [ amd | cmd ]
+     * @return
+     */
+    public String buildModuleMap(String module) {
         JSONObject paths = new JSONObject();
+        String modulePrefix = "";
+
+        if(module.equals("amd")) {
+            modulePrefix = "require.config({paths:";
+        } else if (module.equals("cmd")) {
+            modulePrefix = "seajs.config({alias:";
+        }
 
         calculate();
 
@@ -708,7 +686,7 @@ public class Resource {
         if (paths.isEmpty()) {
             return "";
         } else {
-            return "seajs.config({alias: " + JSONObject.toJSON(paths) + "})";
+            return modulePrefix + JSONObject.toJSON(paths) + "})";
         }
     }
 

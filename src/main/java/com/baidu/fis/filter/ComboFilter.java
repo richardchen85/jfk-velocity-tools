@@ -58,7 +58,7 @@ public class ComboFilter implements Filter {
             sb
                 .append("/* ")
                 .append(url)
-                .append((new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss").format(new Date())))
+                //.append((new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss").format(new Date())))
                 .append(" */\n");
             String line = null;
             while ((line = bufferedReader.readLine()) != null) {
