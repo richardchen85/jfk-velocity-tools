@@ -23,8 +23,9 @@ public class ComboFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest)request;
-        if(req.getQueryString() != null && req.getQueryString().indexOf("?") == 0) {
-            String[] files = req.getQueryString().substring(1).split(",");
+        String query = req.getQueryString();
+        if(query != null && query.indexOf("?") == 0) {
+            String[] files = query.substring(1).split(",");
             StringBuilder sb = new StringBuilder();
             for(String file:files) {
                 String realPath = req.getSession().getServletContext().getRealPath("/" + file);
@@ -36,6 +37,11 @@ public class ComboFilter implements Filter {
                 }
             }
             response.setCharacterEncoding("UTF-8");
+            if(query.endsWith(".css")) {
+                response.setContentType("text/css");
+            } else if (query.endsWith(".js")) {
+                response.setContentType("application/javascript");
+            }
             response.getWriter().write(sb.toString());
         } else {
             chain.doFilter(request, response);
