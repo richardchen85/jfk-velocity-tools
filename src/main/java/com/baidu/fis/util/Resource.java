@@ -816,7 +816,7 @@ public class Resource {
             lastItem = item;
         }
 
-        if(this.combo) {
+        if(this.combo && links.length() > 0) {
             sb.append("<link rel=\"stylesheet\" href=\"");
             if(this.cdnUrl.length() > 0) {
                 sb.append(this.cdnUrl);
