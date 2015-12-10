@@ -736,7 +736,8 @@ public class Resource {
                     group.append("\n");
                     lastItem = item;
                 } else {
-                    if(this.combo) {
+                    // 非combo或在打包配置中的资源不参与combo合并
+                    if(this.combo && !inMapPkg(item.getId())) {
                         srcScript.append(item.getUri().replace(cdnUrl, "").substring(1));
                         srcScript.append(",");
                     } else {
@@ -800,7 +801,8 @@ public class Resource {
                     sb.append("</style>");
                     sb.append(item.getAffix());
                 } else {
-                    if(this.combo) {
+                    // 非combo或在打包配置中的资源不参与combo合并
+                    if(this.combo && !inMapPkg(item.getId())) {
                         links.append(item.getUri().replace(cdnUrl, "").substring(1));
                         links.append(",");
                     } else {
@@ -835,6 +837,23 @@ public class Resource {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * 判断资源是否在打包配置中
+     * @param resourceId 资源的ID
+     * @return
+     */
+    protected boolean inMapPkg(String resourceId) {
+        JSONObject pkg = map.getMap().getJSONObject("pkg");
+        if(pkg != null && pkg.size() > 0) {
+            for(String key:pkg.keySet()) {
+                if(pkg.getJSONObject(key).getJSONArray("has").contains(resourceId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     protected String inspectRes(Res item, int depth) {
