@@ -8,7 +8,7 @@
     <artifactId>jfk-velocity-tools</artifactId>
     <version>1.1</version>
     <name>jfk velocity tools</name>
-    <url>https://github.com/richard-chen-1985/jfk-velocity-tools</url>
+    <url>https://github.com/richardchen85/jfk-velocity-tools</url>
 
     <properties>
         <servlet.version>2.5</servlet.version>
